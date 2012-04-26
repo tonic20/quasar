@@ -5,6 +5,21 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
-  # attr_accessible :title, :body
+  attr_accessible :nickname, :email, :password, :password_confirmation, :remember_me
+  
+  attr_accessor :login
+  
+  
+  
+  # Class methods
+  class << self
+  
+    # Replacement for authentication with login in Devise
+    def find_first_by_auth_conditions(warden_conditions)
+      conditions = warden_conditions.dup
+      login = conditions.delete(:login).downcase
+      where(conditions).where(["lower(nickname) = :value OR lower(email) = :value", { value: login.downcase }]).first
+    end
+    
+  end
 end

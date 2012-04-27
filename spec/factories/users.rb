@@ -7,12 +7,21 @@ FactoryGirl.define do
     last_name             'User'
     password              '123456'
     password_confirmation '123456'
-    role                  'reader'
-    
+
+    trait(:reader)    { role 'reader' }
     trait(:admin)     { role 'admin' }
     trait(:moderator) { role 'moderator' }
     
-    factory :admin_user,     traits: [ :admin ]
-    factory :moderator_user, traits: [ :moderator]
+    factory :reader_user do
+      role 'reader'
+    end
+    
+    factory :admin_user do
+      role 'admin'
+    end
+    
+    factory :moderator_user do
+      role 'moderator'
+    end
   end
 end

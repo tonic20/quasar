@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe User do
   # validations
-  %w[ user moderator reader ].each do |role_name|
+  %w[ admin moderator reader ].each do |role_name|
     it "allow value #{role_name} for *role*" do
       should allow_value(role_name).for :role
     end
@@ -57,32 +57,36 @@ describe User do
   end
 
   # associations
-  it { should have_many :documents }
+  it "have many *documents*" do
+    pending "documents doesn't exist ..."
+    should have_many :documents
+  end
   
   # helpers
   describe 'helpers' do
-    before :each do
-      @user      = FactoryGirl.create :user
+    before :all do
+      @user      = FactoryGirl.create :reader_user
       @admin     = FactoryGirl.create :admin_user
       @moderator = FactoryGirl.create :moderator_user
     end
     
-    # for reader
-    subject = @user
+    describe "reader" do
+      subject { @user }
     
-    its(:full_name)  { should == 'Test User' }
-    its(:is_reader?) { should be_true }
+      its(:full_name)  { should == "#{@user.first_name} #{@user.last_name}" }
+      its(:is_reader?) { should be_true }
+    end
     
-    # for admin
-    subject = @admin
+    describe "admin" do
+      subject { @admin }
     
-    its(:is_admin?) { should be_true }
+      its(:is_admin?) { should be_true }
+    end
     
-    # for moderator
-    subject = @moderator
+    describe "moderator" do
+      subject { @moderator }
     
-    its(:is_moderator?) { should be_true }
-    
+      its(:is_moderator?) { should be_true }
+    end
   end
-  
 end

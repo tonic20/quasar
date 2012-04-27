@@ -13,18 +13,21 @@ Spork.prefork do
     config.use_transactional_fixtures = false
     config.infer_base_class_for_anonymous_controllers = false
     
-    config.before :suite do
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with :truncation
-    end
+    # https://github.com/bmabey/database_cleaner/issues/115
+    #
+    # config.before :suite do
+    #   DatabaseCleaner.strategy = :transaction
+    #   DatabaseCleaner.clean_with :truncation
+    # end
     
-    config.before :each do
-       DatabaseCleaner.start
-    end
+    # config.before :each do
+    #    DatabaseCleaner.start
+    # end
     
-    config.after :each do
-      DatabaseCleaner.clear
-    end
+    # config.after :each do
+    #   DatabaseCleaner.clear
+    # end
+  
   end
 end
 

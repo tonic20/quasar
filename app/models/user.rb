@@ -1,9 +1,11 @@
 class User < ActiveRecord::Base
+  ROLES = %w[admin moderator reader]
+
   # validations
   validates :nickname, presence: true, length: { minimum: 3, maximum: 20 }
   validates :first_name, length: { minimum: 2, maximum: 20 }
   validates :last_name,  length: { minimum: 2, maximum: 20 }
-  validates :role, inclusion: { in: %w[ admin moderator reader ] }
+  validates :role, inclusion: { in: ROLES }
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -17,21 +19,12 @@ class User < ActiveRecord::Base
   def full_name
     "#{first_name} #{last_name}"
   end
-  
-  def is_admin?
-    role == 'admin'
+    
+  ROLES.each do |r|
+    define_method "is_#{r}?" do 
+      role == r
+    end
   end
-  
-  def is_moderator?
-    role == 'moderator'
-  end
-  
-  def is_reader?
-    role == 'reader'
-  end
-  
-
-  
   
   # Class methods
   class << self
